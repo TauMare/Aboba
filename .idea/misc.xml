@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< Updated upstream
         <entry key="..\:/Users/Holo/AndroidStudioProjects/Aboba/app/src/main/res/layout/activity_main.xml" value="0.67" />
+=======
+        <entry key="..\:/Users/Holo/AndroidStudioProjects/Aboba/app/src/main/res/layout/activity_main.xml" value="0.33" />
+>>>>>>> Stashed changes
       </map>
     </option>
   </component>

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<<<<<<< Updated upstream
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,4 +25,13 @@
         tools:layout_editor_absoluteX="158dp"
         tools:layout_editor_absoluteY="308dp" />
 
+=======
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Типо кнопка"
+        tools:layout_editor_absoluteX="108dp"
+        tools:layout_editor_absoluteY="212dp" />
+>>>>>>> Stashed changes
 </androidx.constraintlayout.widget.ConstraintLayout>
