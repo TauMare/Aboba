@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
+import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -14,9 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-    public void sendMessage(View view) {
-        Button button = findViewById(R.id.btn1);
+    public void incrementBtn(View view) {
+        TextView text1 = findViewById(R.id.text1);
         counter++;
-        button.setText(counter.toString());
+        text1.setText(counter.toString());
+    }
+    public void decrementBtn(View view) {
+        TextView text1 = findViewById(R.id.text1);
+        counter--;
+        text1.setText(counter.toString());
     }
 }
