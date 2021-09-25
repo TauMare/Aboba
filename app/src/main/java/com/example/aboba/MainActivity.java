@@ -6,11 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
-<<<<<<< Updated upstream
-
-=======
-import android.widget.Button;
->>>>>>> Stashed changes
 
 public class MainActivity extends AppCompatActivity {
     Button switchToSecondActivity;
@@ -27,15 +22,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-<<<<<<< Updated upstream
-    public void sendMessage(View view) {
-        Button button = findViewById(R.id.btn1);
-        counter++;
-        button.setText(counter.toString());
-=======
+
     private void switchActivities() {
         Intent switchActivityIntent = new Intent(this, SecondActivity.class);
         startActivity(switchActivityIntent);
->>>>>>> Stashed changes
+
     }
 }
