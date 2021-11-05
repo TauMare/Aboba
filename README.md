@@ -9,7 +9,7 @@
         VideoView videoView =(VideoView)findViewById(R.id.videoView);
         MediaController mediaController= new MediaController(this);
         mediaController.setAnchorView(videoView);
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video1);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.ohimsorry);
         videoView.setMediaController(mediaController);
         videoView.setVideoURI(uri);
         videoView.requestFocus();
