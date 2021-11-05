@@ -1,20 +1,11 @@
 ##Савинцев А.С.##  
-Берем прошлый проект, убираем все лишнее, теперь работем с видеовью, а не имейджвью. Все связанное с анимациями тоже, подкидываем свой смешной видик.
-Смотрим по презентации что и как работает, много тыкаемся и приходим к следующему коду:
-```Java
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        VideoView videoView =(VideoView)findViewById(R.id.videoView);
-        MediaController mediaController= new MediaController(this);
-        mediaController.setAnchorView(videoView);
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video1);
-        videoView.setMediaController(mediaController);
-        videoView.setVideoURI(uri);
-        videoView.requestFocus();
-        videoView.start();
-    }
-```  
-По итогу получаем вот такую красоту
-![image info](./studio64_sVMMoEwW59.png)  
+Вместо описанного в презентации способа возьмем обычный счетчик (его значения тоже сбиваются при переворачивании)
+Смотрим как сделано в презентации (функции onSave и onRestore), делаем также, тыкаемся, все получается
+
+По итогу получаем вот такое (не разобрался, как сделать так, чтобы кнопка и текст были на том же месте при перевернутом экране)
+![image info](./studio64_7KZovQF958.png)
+![image info](./studio64_bWQdYPOIy0.png)
+![image info](./studio64_fGU1ATekCH.png)
+![image info](./studio64_GvMSPj9xY9.png)
+![image info](./studio64_nZ2oEx2wus.png)
+![image info](./studio64_o1DMc5YhSj.png)
