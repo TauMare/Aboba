@@ -1,63 +1,112 @@
 package com.example.aboba;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    Button buttonAdd, buttonDelete, buttonClear, buttonRead, buttonUpdate;
+    EditText etName, etEmail, etID;
+    DBHelper dbHelper;
 
-public class MainActivity extends AppCompatActivity {
-    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"outputFile.txt");
-    private final static String FILE_NAME = "outputFile.txt";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button saveBtn = findViewById(R.id.saveBtn);
-        saveBtn.setOnClickListener(this::saveData);
-        Button loadBtn = findViewById(R.id.loadBtn);
-        loadBtn.setOnClickListener(this::loadData);
-    }
-    private void saveData(View view){
-        try(FileOutputStream fos = openFileOutput(FILE_NAME,MODE_PRIVATE)){
-            EditText textBox = (EditText) findViewById(R.id.saveText);
-            byte[] buf = textBox.getText().toString().getBytes();
-            fos.write(buf,0,buf.length);
-            Toast.makeText(this, "Данные сохранены", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            Toast.makeText(this, "Файл не найден", Toast.LENGTH_SHORT).show();
-        } catch (IOException ex){
-            ex.printStackTrace();
-            Toast.makeText(this,"Ошибка сохранения файла",Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void loadData(View view){
-        try(FileInputStream fin = openFileInput(FILE_NAME)){
-            byte[] buf = new byte[fin.available()];
-            fin.read(buf);
-            String text = new String(buf);
-            TextView textView = findViewById(R.id.outputText);
-            textView.setText(text);
-        } catch (FileNotFoundException ex){
-            ex.printStackTrace();
-            Toast.makeText(this, "Файл не найден", Toast.LENGTH_SHORT).show();
-        } catch (IOException ex){
-            ex.printStackTrace();
-            Toast.makeText(this,"Ошибка чтения файла", Toast.LENGTH_SHORT).show();
-        }
 
+        buttonAdd = (Button) findViewById(R.id.buttonAdd);
+        buttonAdd.setOnClickListener(this);
+
+        buttonRead = (Button) findViewById(R.id.buttonRead);
+        buttonRead.setOnClickListener(this);
+
+        buttonClear = (Button) findViewById(R.id.buttonClear);
+        buttonClear.setOnClickListener(this);
+
+        buttonUpdate = (Button) findViewById(R.id.buttonUpdate);
+        buttonUpdate.setOnClickListener(this);
+
+        buttonDelete = (Button) findViewById(R.id.buttonDelete);
+        buttonDelete.setOnClickListener(this);
+
+        etID = (EditText) findViewById(R.id.etID);
+        etName = (EditText) findViewById(R.id.etName);
+        etEmail = (EditText) findViewById(R.id.etEmail);
+
+        dbHelper = new DBHelper(this);
+    }
+
+    public void onClick(View v)
+    {
+        String ID = etID.getText().toString();
+        String name = etName.getText().toString();
+        String email = etEmail.getText().toString();
+
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues(); // класс для добавления новых строк в таблицу
+
+        switch (v.getId())
+        {
+            case R.id.buttonAdd:
+                contentValues.put(DBHelper.KEY_NAME, name);
+                contentValues.put(DBHelper.KEY_MAIL, email);
+                database.insert(DBHelper.TABLE_PERSONS, null, contentValues);
+                break;
+
+            case R.id.buttonRead: //делаем новую запись в табличку
+                Cursor cursor = database.query(DBHelper.TABLE_PERSONS, null, null, null,
+                        null, null, null); // все поля без сортировки и группировки
+
+                if (((Cursor) cursor).moveToFirst())
+                {
+                    int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
+                    int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
+                    int emailIndex = cursor.getColumnIndex(DBHelper.KEY_MAIL);
+                    do {
+                        Log.d("mLog", "ID =" + cursor.getInt(idIndex) +
+                                ", name = " + cursor.getString(nameIndex) +
+                                ", email = " + cursor.getString(emailIndex));
+
+                    } while (cursor.moveToNext());
+                    //логируем типа все работает
+                } else
+                    Log.d("mLog", "0 rows");
+
+                cursor.close(); // освобождение памяти
+                break;
+
+            case R.id.buttonClear: //чистим табличку
+                database.delete(DBHelper.TABLE_PERSONS, null, null);
+                break;
+
+            case R.id.buttonDelete: //делаем что-то при удалении
+                if (ID.equalsIgnoreCase(""))
+                {
+                    break;
+                }
+                int delCount = database.delete(DBHelper.TABLE_PERSONS, DBHelper.KEY_ID + "= " + ID, null);
+                Log.d("mLog", "Удалено строк = " + delCount);
+
+            case R.id.buttonUpdate: //делаем что-то при обновлении
+                if (ID.equalsIgnoreCase(""))
+                {
+                    break;
+                }
+                contentValues.put(DBHelper.KEY_MAIL, email);
+                contentValues.put(DBHelper.KEY_NAME, name);
+                int updCount = database.update(DBHelper.TABLE_PERSONS, contentValues, DBHelper.KEY_ID + "= ?", new String[] {ID});
+                Log.d("mLog", "Обновлено строк = " + updCount);
+        }
+        dbHelper.close(); // закрываем соединение с БД когда закончили операции
     }
 }
